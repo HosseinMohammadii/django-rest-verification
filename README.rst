@@ -47,9 +47,5 @@ from "BaseGenerateVerificationAPIView" set it to "send_code_function" variable.
 4. connect your urls to your views.
 
 
-5. Run ``python manage.py makemigrations`` to create the verification models migrations.
-It depends on your User model.
-
-
-6. Run ``python manage.py migrate`` to create the verification models.
+5. Run ``python manage.py migrate`` to create the verification models.
 
