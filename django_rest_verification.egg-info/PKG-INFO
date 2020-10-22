@@ -1,0 +1,79 @@
+Metadata-Version: 1.1
+Name: django-rest-verification
+Version: 0.11
+Summary: A Django app to conduct code-based verification.
+Home-page: https://github.com/HosseinMohammadii/
+Author: Hossein Mohammadi
+Author-email: hossein.mohammadi.1201@gmail.com
+License: MIT-License
+Description: ============
+        Verification
+        ============
+        
+        Verification is a Django app to conduct code-based verifications. For any verification,
+        email or phone, it can be used.
+        
+        Detailed documentation is in the "docs" directory.
+        
+        Quick start
+        -----------
+        
+        1. Add "verification" to your INSTALLED_APPS setting like this::
+        
+            INSTALLED_APPS = [
+                ...
+                'verification',
+            ]
+        
+        2. Write yuor preferred settings in settings file::
+           
+            VERIFICATION = {
+                'VERIFICATIONS': [
+                    {'type': 'email', 'user_model_field': 'is_email_verified'},],
+        
+                'CODE_LENGTH': 6,
+                'CONTAINS_NUMERIC': True,
+                'CONTAINS_UPPER_ALPHABETIC': False,
+                'CONTAINS_LOWER_ALPHABETIC': False,
+                'LIFE_TIME_SECOND': 0,
+                'LIFE_TIME_MINUTE': 3,
+                'LIFE_TIME_HOUR': 0,
+                'LIFE_TIME_DAY': 0,
+                'LIFE_TIME_PENALTY_SECOND': 60,
+                
+            }
+            
+        
+        2. Inherit from verification.views "BaseGenerateVerificationAPIView" and
+        "BaseVerifyVerificationAPIView" classes.
+        
+        
+        3. Write your preferred function for sending code and In class that inherits
+        from "BaseGenerateVerificationAPIView" set it to "send_code_function" variable.
+        
+        
+        4. connect your urls to your views.
+        
+        
+        5. Run ``python manage.py makemigrations`` to create the verification models migrations.
+        It depends on your User model.
+        
+        
+        6. Run ``python manage.py migrate`` to create the verification models.
+        
+        
+Platform: UNKNOWN
+Classifier: Environment :: Web Environment
+Classifier: Framework :: Django
+Classifier: Framework :: Django :: 3.1
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Topic :: Internet :: WWW/HTTP
+Classifier: Topic :: Internet :: WWW/HTTP :: Dynamic Content
