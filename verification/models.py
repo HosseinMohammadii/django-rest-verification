@@ -13,11 +13,6 @@ class BaseVerification(models.Model):
         related_query_name="%(app_label)s_%(class)ss",
     )
 
-    # email_address = models.CharField(
-    #     max_length=512,
-    #     unique=True,
-    # )
-
     verification_type = models.CharField(
         max_length=128,
     )
@@ -52,7 +47,7 @@ class Verification(BaseVerification):
 
     class Meta:
         unique_together = ['user', 'verification_type']
-        ordering = ['created']
+        ordering = ['-created']
 
 
 class VerificationRecord(BaseVerification):
@@ -65,4 +60,4 @@ class VerificationRecord(BaseVerification):
     )
 
     class Meta:
-        ordering = ['created']
+        ordering = ['-created']
