@@ -39,12 +39,11 @@ Quick start
 2. Inherit from verification.views "BaseGenerateVerificationAPIView" and
 "BaseVerifyVerificationAPIView" classes.
 
-
 3. Write your preferred function for sending code and In class that inherits
 from "BaseGenerateVerificationAPIView" set it to "send_code_function" variable.
 
 
-4. connect your urls to your views.
+4. Connect your urls to your views.
 
 
 5. Run ``python manage.py migrate`` to create the verification models.

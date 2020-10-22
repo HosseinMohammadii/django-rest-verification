@@ -1,8 +1,8 @@
 Metadata-Version: 1.1
 Name: django-rest-verification
-Version: 0.13
+Version: 0.16
 Summary: A Django app to conduct code-based verification.
-Home-page: https://github.com/HosseinMohammadii/
+Home-page: https://github.com/HosseinMohammadii/django-rest-verification
 Author: Hossein Mohammadi
 Author-email: hossein.mohammadi.1201@gmail.com
 License: MIT-License
@@ -47,19 +47,14 @@ Description: ============
         2. Inherit from verification.views "BaseGenerateVerificationAPIView" and
         "BaseVerifyVerificationAPIView" classes.
         
-        
         3. Write your preferred function for sending code and In class that inherits
         from "BaseGenerateVerificationAPIView" set it to "send_code_function" variable.
         
         
-        4. connect your urls to your views.
+        4. Connect your urls to your views.
         
         
-        5. Run ``python manage.py makemigrations`` to create the verification models migrations.
-        It depends on your User model.
-        
-        
-        6. Run ``python manage.py migrate`` to create the verification models.
+        5. Run ``python manage.py migrate`` to create the verification models.
         
         
 Platform: UNKNOWN
