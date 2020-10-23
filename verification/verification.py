@@ -13,29 +13,36 @@ User = get_user_model()
 def generate_verification(user, verification_type) -> str:
 
     if is_verified(user, verification_type):
-        raise exceptions.UserIsVerified
+        print("IS VERIFIEDDDDDD")
+        raise exceptions.UserIsVerified()
+        # raise Exception
+    else:
 
-    try:
-        expired_verification = not_have_active_verification(user, verification_type)
+        try:
+            expired_verification = not_have_active_verification(user, verification_type)
 
-        change_to_unverified_record(expired_verification)
+            if expired_verification is not None:
+                change_to_unverified_record(expired_verification)
 
-        verification_code = generate_unique_code(verification_type)
-        new_verification = Verification.objects.create(user=user,
-                                                       verification_type=verification_type,
-                                                       verification_code=verification_code)
-    except Verification.DoesNotExist:
-        verification_code = generate_unique_code(verification_type)
-        new_verification = Verification.objects.create(user=user,
-                                                       verification_type=verification_type,
-                                                       verification_code=verification_code)
+            verification_code = generate_unique_code(verification_type)
+            new_verification = Verification.objects.create(user=user,
+                                                           verification_type=verification_type,
+                                                           verification_code=verification_code)
+        except Verification.DoesNotExist:
+            verification_code = generate_unique_code(verification_type)
+            new_verification = Verification.objects.create(user=user,
+                                                           verification_type=verification_type,
+                                                           verification_code=verification_code)
 
     return new_verification
 
 
+# verify_by_verification()
+
+
 def verify(*args, **kwargs):
-    user_id = kwargs.get('user')
-    user = User.objcet.get(id=user_id)
+    user = kwargs.get('user')
+    # user = User.objects.get(id=user_id)
     code = kwargs.get(VERIFICATION_CODE_FIELD)
     verification_type = kwargs.get('verification_type')
     return verify_code(user, verification_type, code)
@@ -74,12 +81,15 @@ def not_have_active_verification(user, verification_type):
     :param verification_type:
     :return:
     """
-    verification = Verification.objects.get(user=user,
-                                            verification_type=verification_type)
-    if timezone.now() < verification.created + conf.CODE_LIEF_TIME:
-        raise exceptions.UserHasActiveVerification
+    try:
+        verification = Verification.objects.get(user=user,
+                                                verification_type=verification_type)
+        if timezone.now() < verification.created + conf.CODE_LIEF_TIME:
+            raise exceptions.UserHasActiveVerification
 
-    return verification
+        return verification
+    except Verification.DoesNotExist:
+        return None
 
 
 def change_to_verified_record(verification: Verification):

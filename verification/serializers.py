@@ -8,7 +8,7 @@ from .models import (BaseVerification,
 from .validators import validate_verification_type
 
 from .verification import generate_verification
-from .conf import VERIFICATION_CODE_FIELD
+from .conf import VERIFICATION_CODE_FIELD, VERIFICATIONS_TYPES
 
 
 class BaseVerificationSerializer(serializers.ModelSerializer):
@@ -31,10 +31,6 @@ class BaseVerificationSerializer(serializers.ModelSerializer):
             raise ValidationError(_("The user should send request himself."))
         return value
 
-    def validate(self, attrs):
-        user = attrs
-        is_verified(user, verification_type=self.verification_type)
-
     def create(self, validated_data):
         pass
 
@@ -42,35 +38,90 @@ class BaseVerificationSerializer(serializers.ModelSerializer):
         pass
 
 
-class VerificationSerializer(BaseVerificationSerializer):
+class VerificationGenerateRequestSerializer(BaseVerificationSerializer):
+
+    verification_type = serializers.ChoiceField(
+        choices=VERIFICATIONS_TYPES
+    )
 
     class Meta(BaseVerificationSerializer.Meta):
         model = Verification
         fields = [
-            'id', 'user', 'verification_type', 'created', 'updated', VERIFICATION_CODE_FIELD
+            'user', 'verification_type',
         ]
-
-        extra_kwargs = {
-            VERIFICATION_CODE_FIELD: {'write_only': True}
-        }
+        validators = []
 
     def create(self, validated_data):
         return generate_verification(validated_data['user'], validated_data['verification_type'])
 
 
-# class VerificationSerializer(BaseVerificationSerializer):
+class VerificationGenerateSerializer(BaseVerificationSerializer):
+
+    verification_type = serializers.ChoiceField(
+        choices=VERIFICATIONS_TYPES
+    )
+
+    class Meta(BaseVerificationSerializer.Meta):
+        model = Verification
+        fields = [
+            'id', 'user', 'verification_type', 'created', 'updated',
+        ]
+
+        validators = []
+
+
+class VerificationVerifySerializer(BaseVerificationSerializer):
+
+    verification_type = serializers.ChoiceField(
+        choices=VERIFICATIONS_TYPES
+    )
+
+    verification_code = serializers.CharField(
+        validators=[],
+    )
+
+    class Meta(BaseVerificationSerializer.Meta):
+        model = Verification
+        fields = [
+            'id', 'user', 'verification_type', 'created', 'updated', VERIFICATION_CODE_FIELD,
+        ]
+
+        extra_kwargs = {
+            VERIFICATION_CODE_FIELD: {'write_only': True, 'validators': []},
+        }
+
+        validators = []
+
+    def validate_verification_code(self, value):
+        pass
+
+    def create(self, validated_data):
+        return Verification.objects.get(user=validated_data['user'], verification_type=validated_data['verification_type'])
+
+
+# class VerificationVerifySerializer(BaseVerificationSerializer):
+#
+#     verification_type = serializers.ChoiceField(
+#         choices=VERIFICATIONS_TYPES
+#     )
+#
+#     verification_code = serializers.CharField(
+#         validators=[],
+#     )
 #
 #     class Meta(BaseVerificationSerializer.Meta):
 #         model = Verification
 #         fields = [
-#             'id', 'user', 'verification_type', 'created', 'updated',
+#             'id', 'user', 'verification_type', 'created', 'updated', 'verified'
 #         ]
-
-
-class VerificationRecordSerializer(BaseVerificationSerializer):
-    class Meta(BaseVerificationSerializer.Meta):
-        model = VerificationRecord
-        fields = [
-            'id', 'user', 'verification_type', 'verification_code', 'created', 'updated', 'is_verified',
-        ]
-
+#
+#         extra_kwargs = {
+#         }
+#
+#         validators = []
+#
+#     def validate_verification_code(self, value):
+#         pass
+#
+#     def create(self, validated_data):
+#         return Verification.objects.get(user=validated_data['user'], verification_type=validated_data['verification_type'])

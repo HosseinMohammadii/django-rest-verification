@@ -19,10 +19,6 @@ class BaseVerification(models.Model):
 
     verification_code = None
 
-    code_sent = models.BooleanField(
-        default=False,
-    )
-
     created = models.DateTimeField(
         auto_created=True,
         auto_now=True,
