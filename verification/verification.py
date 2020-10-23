@@ -13,9 +13,7 @@ User = get_user_model()
 def generate_verification(user, verification_type) -> str:
 
     if is_verified(user, verification_type):
-        print("IS VERIFIEDDDDDD")
         raise exceptions.UserIsVerified()
-        # raise Exception
     else:
 
         try:

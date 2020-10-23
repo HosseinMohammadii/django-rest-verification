@@ -32,11 +32,9 @@ class HasNotActiveVerification(BasePermission):
     def has_permission(self, request, view):
         if request.method != 'POST':
             return True
-        print("VVMVMVMVMMVMVM")
         user = request.user
         verification_type = validate_verification_type(request.data.get('verification_type', None))
         if user and user.is_authenticated:
-            print("MBNBNBNNBNBNBNBNBNBNNBNB")
             # This line may raise exception if user has active verification
             not_have_active_verification(user, verification_type=verification_type)
             return True
