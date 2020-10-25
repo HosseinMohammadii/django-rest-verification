@@ -1,12 +1,11 @@
 from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.settings import api_settings
-from rest_framework.permissions import IsAuthenticated
 
 from .serializers import VerificationGenerateSerializer, VerificationVerifySerializer, \
     VerificationGenerateRequestSerializer
 from .verification import verify
-from .permissions import IsNotVerified, HasNotActiveVerification
+from .permissions import IsAuthenticatedOrOptions, IsNotVerified, HasNotActiveVerification
 from . import conf
 
 
@@ -55,7 +54,7 @@ class BaseGenerateVerificationAPIView(BaseAPIView):
     send_code_function = None
     request_serializer_class = VerificationGenerateRequestSerializer
     serializer_class = VerificationGenerateSerializer
-    permission_classes = (IsAuthenticated, IsNotVerified, HasNotActiveVerification)
+    permission_classes = (IsAuthenticatedOrOptions, IsNotVerified, HasNotActiveVerification)
 
     def post(self, request, *args, **kwargs):
         request_serializer = self.get_request_serializer(data=request.data)
@@ -80,7 +79,7 @@ class BaseGenerateVerificationAPIView(BaseAPIView):
 
 class BaseVerifyVerificationAPIView(generics.GenericAPIView):
     serializer_class = VerificationVerifySerializer
-    permission_classes = (IsAuthenticated, IsNotVerified)
+    permission_classes = (IsAuthenticatedOrOptions, IsNotVerified)
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)

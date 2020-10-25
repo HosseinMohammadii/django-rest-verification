@@ -1,7 +1,17 @@
-from rest_framework.permissions import BasePermission
+from rest_framework.permissions import BasePermission, IsAuthenticated
+from rest_framework.exceptions import NotAuthenticated
 
 from .verification import is_verified, not_have_active_verification
 from .validators import validate_verification_type
+
+
+class IsAuthenticatedOrOptions(IsAuthenticated):
+    message = 'User Should be Authenticated'
+
+    def has_permission(self, request, view):
+        if request.method == 'OPTIONS':
+            return True
+        return super(IsAuthenticatedOrOptions, self).has_permission(request, view)
 
 
 class IsNotVerified(BasePermission):
