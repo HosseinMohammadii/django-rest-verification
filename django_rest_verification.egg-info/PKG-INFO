@@ -1,6 +1,6 @@
 Metadata-Version: 1.1
 Name: django-rest-verification
-Version: 0.24
+Version: 0.42
 Summary: A Django app to conduct code-based verification.
 Home-page: https://github.com/HosseinMohammadii/django-rest-verification
 Author: Hossein Mohammadi

@@ -113,8 +113,11 @@ def change_to_unverified_record(verification: Verification):
 
 
 def change_to_verified_user(user, verification_type):
-    update_data = {conf.get_user_model_field(verification_type): True}
-    User.objects.filter(pk=user.pk).update(**update_data)
+    # update_data = {conf.get_user_model_field(verification_type): True}
+    # User.objects.filter(pk=user.pk).update(**update_data)
+    instance = User.objects.get(pk=user.pk)
+    setattr(instance, conf.get_user_model_field(verification_type), True)
+    instance.save()
 
 
 def generate_unique_code(verification_type):

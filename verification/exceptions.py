@@ -16,7 +16,7 @@ class UserIsVerified(PermissionDenied):
 
 class VerificationTypeNotValid(APIException):
     status_code = status.HTTP_400_BAD_REQUEST
-    default_detail = _('Verification_field is not valid')
+    default_detail = _('Verification_type is not valid')
     default_code = 'invalid'
 
 
@@ -25,6 +25,3 @@ class UserHasActiveVerification(APIException):
     default_detail = _('User has unexpired verification code')
     default_code = 'permission_denied'
 
-
-class VerificationFailed(ValidationError):
-    default_detail = _('Verification failed.')

@@ -21,3 +21,5 @@ verification/verification.py
 verification/views.py
 verification/migrations/0001_initial.py
 verification/migrations/__init__.py
+verification/signals/__init__.py
+verification/signals/handlers.py

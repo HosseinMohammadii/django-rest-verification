@@ -96,7 +96,15 @@ class VerificationVerifySerializer(BaseVerificationSerializer):
         pass
 
     def create(self, validated_data):
-        return Verification.objects.get(user=validated_data['user'], verification_type=validated_data['verification_type'])
+        try:
+            verification = Verification.objects.get(user=validated_data['user'],
+                                                    verification_type=validated_data['verification_type'])
+        except Verification.DoesNotExist:
+            verification = Verification(
+                user=None,
+                verification_code=None
+            )
+        return verification
 
 
 # class VerificationVerifySerializer(BaseVerificationSerializer):

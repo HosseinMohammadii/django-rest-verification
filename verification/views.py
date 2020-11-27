@@ -80,6 +80,7 @@ class BaseGenerateVerificationAPIView(BaseAPIView):
 class BaseVerifyVerificationAPIView(generics.GenericAPIView):
     serializer_class = VerificationVerifySerializer
     permission_classes = (IsAuthenticatedOrOptions, IsNotVerified)
+    post_check_function = None
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -87,12 +88,16 @@ class BaseVerifyVerificationAPIView(generics.GenericAPIView):
         serializer.save()
         instance = serializer.instance
         data = serializer.validated_data
-        data[conf.VERIFICATION_CODE_FIELD] = getattr(instance, conf.VERIFICATION_CODE_FIELD)
+        data[conf.VERIFICATION_CODE_FIELD] = request.data.get(conf.VERIFICATION_CODE_FIELD)
         verified = verify(**data)
+        if self.post_check_function is not None:
+            self.post_check_function(request, instance, verified)
+
         response_data = {}
         if not verified:
             response_data['verified'] = verified
-            return Response(response_data, status=status.HTTP_200_OK)
+            return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
+
         headers = self.get_success_headers(serializer.data)
         response_data.update(serializer.data)
         response_data['verified'] = verified
